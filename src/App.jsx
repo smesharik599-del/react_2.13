@@ -38,26 +38,27 @@ function App() {
   }
 
   function handleDelete(id) {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id != id));
   }
 
   function handleSave(id, newDescription) {
     setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id ? { ...task, description: newDescription } : task,
-      ),
+      prevTasks.map((task) => {
+        if (task.id === id) {
+          return {
+            ...task,
+            description: newDescription,
+          };
+        }
+      }),
     );
   }
   function handleClearCompleted() {
-    setTasks((prevTasks) => prevTasks.filter((task) => !task.completed));
+    setTasks((prevTasks) =>
+      prevTasks.filter((taskcompl) => !taskcompl.completed),
+    );
   }
 
-  const visibleTasks = tasks.filter((task) => {
-    if (filter === "Active") return !task.completed;
-    if (filter === "Completed") return task.completed;
-
-    return true;
-  });
   return (
     <section className="todoapp">
       <header className="header">
@@ -68,7 +69,7 @@ function App() {
 
       <section className="main">
         <TaskList
-          tasks={visibleTasks}
+          tasks={tasks}
           onToggle={handleToggle}
           onDelete={handleDelete}
           onSave={handleSave}
